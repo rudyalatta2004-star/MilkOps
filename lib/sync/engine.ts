@@ -12,6 +12,15 @@ import type {
 
 const LAST_SYNC_KEY = "appvaca-last-sync";
 
+// Cuenta compartida del establo: la app inicia sesión sola con estas
+// credenciales (no hay pantalla de login). Todos los dispositivos usan la
+// misma cuenta, por lo que comparten los mismos datos.
+const SHARED_EMAIL = process.env.NEXT_PUBLIC_SHARED_EMAIL;
+const SHARED_PASSWORD = process.env.NEXT_PUBLIC_SHARED_PASSWORD;
+export const loginCompartidoConfigurado = Boolean(
+  SHARED_EMAIL && SHARED_PASSWORD,
+);
+
 export interface ResultadoSync {
   subidos: number;
   bajados: number;
@@ -22,6 +31,23 @@ export interface ResultadoSync {
 export async function usuarioActual() {
   if (!supabase) return null;
   const { data } = await supabase.auth.getUser();
+  return data.user ?? null;
+}
+
+/**
+ * Garantiza que haya sesión iniciada con la cuenta compartida del establo.
+ * Si ya hay sesión, la reutiliza; si no, inicia sesión automáticamente.
+ */
+export async function asegurarSesion() {
+  if (!supabase) return null;
+  const actual = await usuarioActual();
+  if (actual) return actual;
+  if (!SHARED_EMAIL || !SHARED_PASSWORD) return null;
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: SHARED_EMAIL,
+    password: SHARED_PASSWORD,
+  });
+  if (error) return null;
   return data.user ?? null;
 }
 

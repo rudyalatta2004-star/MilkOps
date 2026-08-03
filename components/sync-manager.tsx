@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { cloudEnabled } from "@/lib/supabase/client";
-import { sincronizar, usuarioActual } from "@/lib/sync/engine";
+import { sincronizar, asegurarSesion } from "@/lib/sync/engine";
 
 /**
  * Sincronización automática (RNF-02): intenta sincronizar al cargar la
@@ -16,7 +16,8 @@ export function SyncManager() {
     let activo = true;
     const intentar = async () => {
       if (!activo || !navigator.onLine) return;
-      const user = await usuarioActual();
+      // Inicia sesión sola con la cuenta compartida si hace falta.
+      const user = await asegurarSesion();
       if (!user) return;
       try {
         await sincronizar();
