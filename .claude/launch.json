@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "appvaca-dev",
+      "runtimeExecutable": "C:\\Users\\HP\\Desktop\\APPVACA\\scripts\\dev.cmd",
+      "runtimeArgs": [],
+      "port": 3000
+    },
+    {
+      "name": "appvaca-prod",
+      "runtimeExecutable": "C:\\Users\\HP\\Desktop\\APPVACA\\scripts\\start.cmd",
+      "runtimeArgs": [],
+      "port": 3000
+    }
+  ]
+}

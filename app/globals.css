@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+/* ============================================================
+   SISTEMA DE DISEÑO — APPVACA
+   Paleta amable: crema cálida + blanco + verde natural.
+   Solo modo claro.
+   ============================================================ */
+:root {
+  /* Superficies — base taupe cálido (gris/café suave) + tarjetas blancas */
+  --background: #e7e3db;
+  --surface: #ffffff;
+  --surface-2: #efeae1;
+  --foreground: #23271e;
+  --muted: #ece7de;
+  --muted-foreground: #6f6a5e;
+
+  /* Bordes / líneas — taupe apagado */
+  --border: #dcd6c9;
+  --border-strong: #ccc5b5;
+  --ring: #3f9e6a;
+
+  /* Marca — verde natural, amable */
+  --primary: #2f9d5f;
+  --primary-hover: #26824e;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e4f4e8;
+
+  /* Acento secundario — miel cálida que combina con la crema */
+  --accent: #c68a2e;
+  --accent-soft: #f7edd6;
+
+  /* Estados semánticos */
+  --success: #2f9d5f;
+  --success-soft: #e4f4e8;
+  --warning: #c98a2b;
+  --warning-soft: #f8edd7;
+  --danger: #d1523f;
+  --danger-soft: #fae6e1;
+  --info: #3b95a3;
+  --info-soft: #e0f0f2;
+
+  /* Celo / reproducción — rosa suave (estilo Flo) */
+  --rose: #e0567f;
+  --rose-strong: #d81b60;
+  --rose-soft: #fce4ec;
+
+  /* Sombras — muy suaves, cálidas */
+  --shadow-sm: 0 1px 2px rgba(70, 60, 30, 0.06), 0 1px 1px rgba(70, 60, 30, 0.04);
+  --shadow-md: 0 6px 18px rgba(70, 60, 30, 0.08), 0 2px 5px rgba(70, 60, 30, 0.04);
+  --shadow-lg: 0 16px 40px rgba(70, 60, 30, 0.12), 0 4px 10px rgba(70, 60, 30, 0.06);
+
+  /* Radios — más redondeado = más amable */
+  --radius: 1.1rem;
+}
+
+/* Mapeo a utilidades de Tailwind v4 */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-rose: var(--rose);
+  --color-rose-strong: var(--rose-strong);
+  --color-rose-soft: var(--rose-soft);
+
+  --radius-xl: var(--radius);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* respeta el notch / barra inferior en móviles */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Scrollbar sutil */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 2px solid var(--background);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Foco accesible y visible */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Animaciones utilitarias */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--muted);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  animation: shimmer 1.4s infinite;
+}
