@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppShell } from "@/components/app-shell";
 import { Pwa } from "@/components/pwa";
 import { SyncManager } from "@/components/sync-manager";
+import { InstallPrompt } from "@/components/install-prompt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
       <body className="min-h-full">
         <Pwa />
         <SyncManager />
+        <InstallPrompt />
         <AppShell>{children}</AppShell>
       </body>
     </html>

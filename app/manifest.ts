@@ -6,8 +6,11 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "MilkOps",
     description:
       "Control offline de producción de leche, sanidad y reproducción del hato.",
+    id: "/",
     start_url: "/",
+    scope: "/",
     display: "standalone",
+    categories: ["business", "productivity"],
     background_color: "#e7e3db",
     theme_color: "#2f9d5f",
     orientation: "portrait",

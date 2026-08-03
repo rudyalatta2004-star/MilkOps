@@ -22,7 +22,18 @@ export function Pwa() {
       process.env.NODE_ENV === "production" &&
       "serviceWorker" in navigator
     ) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((reg) => reg.update())
+        .catch(() => {});
+      // Cuando una versión nueva toma el control, recarga una vez para
+      // que el usuario siempre vea la última versión (evita caché vieja).
+      let recargando = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (recargando) return;
+        recargando = true;
+        window.location.reload();
+      });
     }
 
     return () => {
