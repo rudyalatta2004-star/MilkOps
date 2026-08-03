@@ -21,10 +21,6 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "MilkOps",
   },
-  icons: {
-    icon: "/icono.png",
-    apple: "/icono.png",
-  },
 };
 
 export const viewport: Viewport = {
