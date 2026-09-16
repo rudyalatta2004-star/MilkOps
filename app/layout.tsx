@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { Pwa } from "@/components/pwa";
 import { SyncManager } from "@/components/sync-manager";
 import { InstallPrompt } from "@/components/install-prompt";
+import { AuthGate } from "@/components/auth-gate";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +43,9 @@ export default function RootLayout({
         <Pwa />
         <SyncManager />
         <InstallPrompt />
-        <AppShell>{children}</AppShell>
+        <AuthGate>
+          <AppShell>{children}</AppShell>
+        </AuthGate>
       </body>
     </html>
   );

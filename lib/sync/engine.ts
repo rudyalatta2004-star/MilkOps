@@ -12,15 +12,6 @@ import type {
 
 const LAST_SYNC_KEY = "appvaca-last-sync";
 
-// Cuenta compartida del establo: la app inicia sesión sola con estas
-// credenciales (no hay pantalla de login). Todos los dispositivos usan la
-// misma cuenta, por lo que comparten los mismos datos.
-const SHARED_EMAIL = process.env.NEXT_PUBLIC_SHARED_EMAIL;
-const SHARED_PASSWORD = process.env.NEXT_PUBLIC_SHARED_PASSWORD;
-export const loginCompartidoConfigurado = Boolean(
-  SHARED_EMAIL && SHARED_PASSWORD,
-);
-
 export interface ResultadoSync {
   subidos: number;
   bajados: number;
@@ -35,20 +26,23 @@ export async function usuarioActual() {
 }
 
 /**
- * Garantiza que haya sesión iniciada con la cuenta compartida del establo.
- * Si ya hay sesión, la reutiliza; si no, inicia sesión automáticamente.
+ * Inicia sesión con correo y contraseña. Supabase guarda la sesión en el
+ * dispositivo (y la renueva sola), así solo hay que escribirla una vez.
+ * Todos los dispositivos que usen la misma cuenta comparten los datos.
  */
-export async function asegurarSesion() {
-  if (!supabase) return null;
-  const actual = await usuarioActual();
-  if (actual) return actual;
-  if (!SHARED_EMAIL || !SHARED_PASSWORD) return null;
+export async function iniciarSesion(email: string, password: string) {
+  if (!supabase) throw new Error("La nube no está configurada");
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: SHARED_EMAIL,
-    password: SHARED_PASSWORD,
+    email: email.trim(),
+    password,
   });
-  if (error) return null;
-  return data.user ?? null;
+  if (error) throw error;
+  return data.user;
+}
+
+/** Cierra la sesión en este dispositivo. */
+export async function cerrarSesion() {
+  await supabase?.auth.signOut();
 }
 
 /* ------------------------------------------------------------------ */
