@@ -51,7 +51,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           className="pointer-events-none fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage:
-              "linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.38)), url('/fondo.jpg')",
+              "linear-gradient(to bottom, rgba(10,14,16,0.45), rgba(10,14,16,0.78)), url('/fondo.jpg')",
           }}
         />
       )}
@@ -60,7 +60,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="hidden md:flex md:w-64 md:flex-col md:border-r md:border-border md:bg-surface">
         <div className="flex h-16 items-center gap-2 px-5">
           <Image
-            src="/icono.png"
+            src="/logo-app.png"
             unoptimized
             alt="MilkOps"
             width={40}
@@ -111,7 +111,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Encabezado móvil */}
         <header className="flex h-14 items-center gap-2 border-b border-border bg-surface px-4 md:hidden">
           <Image
-            src="/icono.png"
+            src="/logo-app.png"
             unoptimized
             alt="MilkOps"
             width={36}

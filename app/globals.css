@@ -1,56 +1,58 @@
 @import "tailwindcss";
 
 /* ============================================================
-   SISTEMA DE DISEÑO — APPVACA
-   Paleta amable: crema cálida + blanco + verde natural.
-   Solo modo claro.
+   SISTEMA DE DISEÑO — MILKOPS
+   Paleta oscura: carbón + verde, sobre fotografía.
+   Tarjetas oscuras translúcidas (efecto vidrio), nunca blancas.
    ============================================================ */
 :root {
-  /* Superficies — base taupe cálido (gris/café suave) + tarjetas blancas */
-  --background: #e7e3db;
-  --surface: #ffffff;
-  --surface-2: #efeae1;
-  --foreground: #23271e;
-  --muted: #ece7de;
-  --muted-foreground: #6f6a5e;
+  color-scheme: dark;
 
-  /* Bordes / líneas — taupe apagado */
-  --border: #dcd6c9;
-  --border-strong: #ccc5b5;
-  --ring: #3f9e6a;
+  /* Superficies — carbón oscuro; las tarjetas son translúcidas */
+  --background: #14191c;
+  --surface: rgba(32, 40, 44, 0.82);
+  --surface-2: rgba(58, 68, 73, 0.75);
+  --foreground: #f1f5f3;
+  --muted: rgba(58, 68, 73, 0.55);
+  --muted-foreground: #a3aeb1;
 
-  /* Marca — verde natural, amable */
-  --primary: #2f9d5f;
-  --primary-hover: #26824e;
+  /* Bordes / líneas — claros y sutiles sobre el oscuro */
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --ring: #6bae4a;
+
+  /* Marca — verde del logo */
+  --primary: #46874f;
+  --primary-hover: #539c5d;
   --primary-foreground: #ffffff;
-  --primary-soft: #e4f4e8;
+  --primary-soft: rgba(107, 174, 74, 0.18);
 
-  /* Acento secundario — miel cálida que combina con la crema */
-  --accent: #c68a2e;
-  --accent-soft: #f7edd6;
+  /* Acento — verde brillante para iconos y realces */
+  --accent: #6bae4a;
+  --accent-soft: rgba(107, 174, 74, 0.16);
 
-  /* Estados semánticos */
-  --success: #2f9d5f;
-  --success-soft: #e4f4e8;
-  --warning: #c98a2b;
-  --warning-soft: #f8edd7;
-  --danger: #d1523f;
-  --danger-soft: #fae6e1;
-  --info: #3b95a3;
-  --info-soft: #e0f0f2;
+  /* Estados semánticos (vivos sobre fondo oscuro) */
+  --success: #6bae4a;
+  --success-soft: rgba(107, 174, 74, 0.18);
+  --warning: #e0b255;
+  --warning-soft: rgba(224, 178, 85, 0.18);
+  --danger: #e5705f;
+  --danger-soft: rgba(229, 112, 95, 0.18);
+  --info: #5fb0c4;
+  --info-soft: rgba(95, 176, 196, 0.18);
 
-  /* Celo / reproducción — rosa suave (estilo Flo) */
-  --rose: #e0567f;
-  --rose-strong: #d81b60;
-  --rose-soft: #fce4ec;
+  /* Celo / reproducción — rosa (estilo Flo) */
+  --rose: #e5709b;
+  --rose-strong: #f59ab8;
+  --rose-soft: rgba(229, 112, 155, 0.20);
 
-  /* Sombras — muy suaves, cálidas */
-  --shadow-sm: 0 1px 2px rgba(70, 60, 30, 0.06), 0 1px 1px rgba(70, 60, 30, 0.04);
-  --shadow-md: 0 6px 18px rgba(70, 60, 30, 0.08), 0 2px 5px rgba(70, 60, 30, 0.04);
-  --shadow-lg: 0 16px 40px rgba(70, 60, 30, 0.12), 0 4px 10px rgba(70, 60, 30, 0.06);
+  /* Sombras — profundas, para separar del fondo */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 22px rgba(0, 0, 0, 0.40);
+  --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.50);
 
-  /* Radios — más redondeado = más amable */
-  --radius: 1.1rem;
+  /* Radios — muy redondeado, como el diseño de referencia */
+  --radius: 1.35rem;
 }
 
 /* Mapeo a utilidades de Tailwind v4 */

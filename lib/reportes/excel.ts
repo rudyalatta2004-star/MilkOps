@@ -40,7 +40,6 @@ interface Seccion {
 const SECCION = {
   resumen: { main: "FF2F9D5F", dark: "FF1F7A45", soft: "FFE4F4E8" },
   animales: { main: "FF2563EB", dark: "FF1E40AF", soft: "FFE6EEFF" },
-  produccion: { main: "FF0E9AA7", dark: "FF0B7A85", soft: "FFDDF3F5" },
   finanzas: { main: "FFB8860B", dark: "FF8A6300", soft: "FFF8EFD6" },
 } satisfies Record<string, Seccion>;
 
@@ -120,11 +119,11 @@ const r2 = (n: number) => Math.round(n * 100) / 100;
 
 /**
  * Genera y descarga el reporte Excel con diseño (título, cabeceras de
- * color, bordes y celdas destacadas). Incluye hojas: Resumen, Animales,
- * Producción diaria y Balance Financiero.
+ * color, bordes y celdas destacadas). Incluye hojas: Resumen, Animales
+ * y Balance Financiero.
  */
 export async function generarReporteExcel(): Promise<{ filas: number }> {
-  const [animales, leche, sanidad, reproduccion, gastos, ingresos, prodDiaria] =
+  const [animales, leche, sanidad, reproduccion, gastos, ingresos] =
     await Promise.all([
       db.animales.toArray(),
       db.leche.toArray(),
@@ -132,7 +131,6 @@ export async function generarReporteExcel(): Promise<{ filas: number }> {
       db.reproduccion.toArray(),
       db.gastos.toArray(),
       db.ingresos.toArray(),
-      db.produccionDiaria.toArray(),
     ]);
 
   const activos = animales
@@ -231,31 +229,6 @@ export async function generarReporteExcel(): Promise<{ filas: number }> {
     );
   });
   wsA.views = [{ state: "frozen", ySplit: 4 }];
-
-  /* ---------------- Hoja: Producción diaria ---------------- */
-  const wsP = wb.addWorksheet("Producción diaria");
-  wsP.columns = [{ width: 18 }, { width: 18 }];
-  titulo(wsP, "Producción diaria de leche", 2, SECCION.produccion);
-  cabecera(wsP, 4, ["Fecha", "Litros totales"], SECCION.produccion);
-  // Agrupar por día (puede haber varias tomas por fecha)
-  const porDia = new Map<string, number>();
-  for (const d of prodDiaria) {
-    porDia.set(d.fecha, (porDia.get(d.fecha) ?? 0) + d.litros);
-  }
-  const diasOrden = [...porDia.entries()].sort((a, b) =>
-    b[0].localeCompare(a[0]),
-  );
-  diasOrden.forEach(([fecha, litros], i) => {
-    filaDatos(wsP, 5 + i, [formatFecha(fecha), r2(litros)], i % 2 === 1);
-  });
-  const totalDias = [...porDia.values()].reduce((s, v) => s + v, 0);
-  const filaTot = 5 + diasOrden.length;
-  filaDatos(wsP, filaTot, ["TOTAL", r2(totalDias)], false);
-  pintar(wsP.getCell(filaTot, 1), SECCION.produccion.main, C.white);
-  pintar(wsP.getCell(filaTot, 2), SECCION.produccion.main, C.white);
-  wsP.getCell(filaTot, 1).border = borde(SECCION.produccion.main);
-  wsP.getCell(filaTot, 2).border = borde(SECCION.produccion.main);
-  wsP.views = [{ state: "frozen", ySplit: 4 }];
 
   /* ---------------- Hoja: Balance Financiero ---------------- */
   const wsF = wb.addWorksheet("Balance Financiero");

@@ -17,13 +17,13 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "es",
     icons: [
       {
-        src: "/icono.png",
+        src: "/logo-app.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icono.png",
+        src: "/logo-app.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

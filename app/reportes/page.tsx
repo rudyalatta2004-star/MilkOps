@@ -69,10 +69,10 @@ export default function ReportesPage() {
             <div className="flex items-start gap-3">
               <Table2 size={18} className="mt-0.5 shrink-0 text-primary" />
               <div>
-                <p className="text-sm font-medium">Hojas de Animales y Producción diaria</p>
+                <p className="text-sm font-medium">Hoja &ldquo;Animales&rdquo;</p>
                 <p className="text-xs text-muted-foreground">
-                  Detalle de cada animal (raza, precio, estados, gestación,
-                  FPP, última vacuna) y el registro de litros totales por día.
+                  Detalle de cada animal: raza, precio, estados, litros de la
+                  última medición, gestación, FPP y última vacuna.
                 </p>
               </div>
             </div>

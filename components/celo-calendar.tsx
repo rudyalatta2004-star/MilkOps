@@ -102,7 +102,7 @@ export function CeloCalendar() {
         <button
           onClick={() => setOffset((o) => o - 1)}
           aria-label="Mes anterior"
-          className="flex h-9 w-9 items-center justify-center rounded-xl text-rose-strong hover:bg-white/50"
+          className="flex h-9 w-9 items-center justify-center rounded-xl text-rose-strong hover:bg-white/10"
         >
           <ChevronLeft size={20} />
         </button>
@@ -110,7 +110,7 @@ export function CeloCalendar() {
         <button
           onClick={() => setOffset((o) => o + 1)}
           aria-label="Mes siguiente"
-          className="flex h-9 w-9 items-center justify-center rounded-xl text-rose-strong hover:bg-white/50"
+          className="flex h-9 w-9 items-center justify-center rounded-xl text-rose-strong hover:bg-white/10"
         >
           <ChevronRight size={20} />
         </button>
