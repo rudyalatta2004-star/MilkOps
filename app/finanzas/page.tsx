@@ -2,15 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
-import {
-  TrendingUp,
-  TrendingDown,
-  Plus,
-  Trash2,
-  Loader2,
-  ArrowDownCircle,
-  ArrowUpCircle,
-} from "lucide-react";
+import { Plus, Minus, Trash2, Loader2 } from "lucide-react";
 import { db } from "@/lib/db/db";
 import {
   registrarGasto,
@@ -60,8 +52,6 @@ export default function FinanzasPage() {
     [ingresos, mes],
   );
 
-  const positivo = balance.liquidez >= 0;
-
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -76,57 +66,7 @@ export default function FinanzasPage() {
         />
       </div>
 
-      {/* Liquidez del mes con semáforo (RF-05.3 / RF-05.4) */}
-      <Card
-        className={cn(
-          "overflow-hidden border-2",
-          positivo ? "border-success" : "border-danger",
-        )}
-      >
-        <div
-          className={cn(
-            "flex items-center justify-between px-5 py-4",
-            positivo ? "bg-success-soft" : "bg-danger-soft",
-          )}
-        >
-          <div>
-            <p
-              className={cn(
-                "text-sm font-medium",
-                positivo ? "text-success" : "text-danger",
-              )}
-            >
-              Liquidez del mes
-            </p>
-            <p
-              className={cn(
-                "mt-1 text-3xl font-bold tabular-nums",
-                positivo ? "text-success" : "text-danger",
-              )}
-            >
-              {formatSoles(balance.liquidez)}
-            </p>
-            <p
-              className={cn(
-                "mt-0.5 text-xs font-medium",
-                positivo ? "text-success" : "text-danger",
-              )}
-            >
-              {positivo ? "Ganancia" : "Déficit"}
-            </p>
-          </div>
-          <span
-            className={cn(
-              "flex h-14 w-14 items-center justify-center rounded-2xl text-white",
-              positivo ? "bg-success" : "bg-danger",
-            )}
-          >
-            {positivo ? <TrendingUp size={28} /> : <TrendingDown size={28} />}
-          </span>
-        </div>
-      </Card>
-
-      {/* Dos cuadros: Ingresos y Gastos */}
+      {/* Dos cuadros: entradas (+) y salidas (−) */}
       <div className="grid gap-4 lg:grid-cols-2">
         <PanelIngresos
           mes={mes}
@@ -140,7 +80,7 @@ export default function FinanzasPage() {
       {balance.totalGastos > 0 && (
         <Card className="p-5">
           <p className="mb-3 text-sm font-semibold text-muted-foreground">
-            Gastos por rubro
+            Detalle por rubro
           </p>
           <ul className="space-y-2">
             {CATEGORIAS_GASTO.map((c) => {
@@ -209,21 +149,26 @@ function PanelIngresos({
   return (
     <Card className="flex flex-col overflow-hidden">
       <div className="flex items-center justify-between bg-success-soft px-5 py-4">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-success text-white">
-            <ArrowUpCircle size={20} />
-          </span>
-          <h2 className="font-semibold text-success">Ingresos</h2>
-        </div>
-        <p className="text-lg font-bold tabular-nums text-success">
+        <span
+          className="flex h-11 w-11 items-center justify-center rounded-xl bg-success text-white"
+          aria-label="Entradas de dinero"
+        >
+          <Plus size={24} strokeWidth={3} />
+        </span>
+        <p className="text-xl font-bold tabular-nums text-success">
           {formatSoles(total)}
         </p>
       </div>
 
       {!abierto ? (
         <div className="p-4">
-          <Button size="lg" className="w-full" onClick={() => setAbierto(true)}>
-            <Plus size={20} /> Ingreso
+          <Button
+            size="lg"
+            className="w-full"
+            onClick={() => setAbierto(true)}
+            aria-label="Agregar entrada"
+          >
+            <Plus size={24} strokeWidth={3} />
           </Button>
         </div>
       ) : (
@@ -271,7 +216,7 @@ function PanelIngresos({
               Cancelar
             </Button>
             <Button type="submit" size="lg" className="flex-1" disabled={guardando}>
-              {guardando ? <Loader2 className="animate-spin" size={20} /> : <Plus size={20} />}
+              {guardando && <Loader2 className="animate-spin" size={20} />}
               Guardar
             </Button>
           </div>
@@ -280,7 +225,7 @@ function PanelIngresos({
 
       <ListaMovimientos
         tone="success"
-        vacio="Sin ingresos este mes."
+        vacio="Sin registros este mes."
         items={items.map((i) => ({
           id: i.id,
           titulo: i.concepto,
@@ -331,13 +276,13 @@ function PanelGastos({
   return (
     <Card className="flex flex-col overflow-hidden">
       <div className="flex items-center justify-between bg-danger-soft px-5 py-4">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-danger text-white">
-            <ArrowDownCircle size={20} />
-          </span>
-          <h2 className="font-semibold text-danger">Gastos</h2>
-        </div>
-        <p className="text-lg font-bold tabular-nums text-danger">
+        <span
+          className="flex h-11 w-11 items-center justify-center rounded-xl bg-danger text-white"
+          aria-label="Salidas de dinero"
+        >
+          <Minus size={24} strokeWidth={3} />
+        </span>
+        <p className="text-xl font-bold tabular-nums text-danger">
           {formatSoles(total)}
         </p>
       </div>
@@ -349,8 +294,9 @@ function PanelGastos({
             size="lg"
             className="w-full"
             onClick={() => setAbierto(true)}
+            aria-label="Agregar salida"
           >
-            <Plus size={20} /> Gasto
+            <Minus size={24} strokeWidth={3} />
           </Button>
         </div>
       ) : (
@@ -407,7 +353,7 @@ function PanelGastos({
               className="flex-1"
               disabled={guardando}
             >
-              {guardando ? <Loader2 className="animate-spin" size={20} /> : <Plus size={20} />}
+              {guardando && <Loader2 className="animate-spin" size={20} />}
               Guardar
             </Button>
           </div>
@@ -416,7 +362,7 @@ function PanelGastos({
 
       <ListaMovimientos
         tone="danger"
-        vacio="Sin gastos este mes."
+        vacio="Sin registros este mes."
         items={items.map((g) => ({
           id: g.id,
           titulo: g.concepto,

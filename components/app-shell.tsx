@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Droplets,
   HeartPulse,
   FileSpreadsheet,
   Cloud,
@@ -28,7 +27,6 @@ interface NavItem {
 
 const NAV: NavItem[] = [
   { href: "/", label: "Inicio", icon: LayoutDashboard },
-  { href: "/produccion", label: "Producción", icon: Droplets },
   { href: "/salud", label: "Salud", icon: HeartPulse },
   { href: "/finanzas", label: "Finanzas", icon: DollarSun },
   { href: "/reportes", label: "Reportes", icon: FileSpreadsheet },
@@ -42,8 +40,22 @@ function isActive(pathname: string, href: string): boolean {
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
+  const enInicio = pathname === "/";
+
   return (
     <div className="min-h-dvh md:flex">
+      {/* Fondo fotográfico del establo, solo en el Inicio (decorativo) */}
+      {enInicio && (
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.38)), url('/fondo.jpg')",
+          }}
+        />
+      )}
+
       {/* Barra lateral (escritorio/tablet) */}
       <aside className="hidden md:flex md:w-64 md:flex-col md:border-r md:border-border md:bg-surface">
         <div className="flex h-16 items-center gap-2 px-5">
@@ -131,7 +143,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Barra inferior (móvil) */}
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur md:hidden">
         <div
-          className="grid grid-cols-5"
+          className="grid grid-cols-4"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           {NAV.map((item) => {
