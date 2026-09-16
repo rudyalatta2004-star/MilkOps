@@ -1,4 +1,5 @@
 import { db, newId, nowIso } from "./db";
+import { eliminarRegistro } from "./eliminaciones";
 import type {
   EventoReproductivo,
   TipoEventoReproductivo,
@@ -80,7 +81,7 @@ function estadoSegunEvento(
 
 /** Elimina un evento reproductivo. */
 export async function eliminarEvento(id: string): Promise<void> {
-  await db.reproduccion.delete(id);
+  await eliminarRegistro("reproduccion", id);
 }
 
 /** Eventos reproductivos de un animal (más reciente primero). */

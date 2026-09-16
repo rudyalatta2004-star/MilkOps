@@ -1,4 +1,5 @@
 import { db, newId, nowIso } from "./db";
+import { eliminarRegistro } from "./eliminaciones";
 import type {
   Gasto,
   Ingreso,
@@ -50,11 +51,11 @@ export async function registrarIngreso(input: {
 }
 
 export function eliminarGasto(id: string) {
-  return db.gastos.delete(id);
+  return eliminarRegistro("gastos", id);
 }
 
 export function eliminarIngreso(id: string) {
-  return db.ingresos.delete(id);
+  return eliminarRegistro("ingresos", id);
 }
 
 /* ------------------------------------------------------------------ */

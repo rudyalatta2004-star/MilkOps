@@ -1,4 +1,5 @@
 import { db, newId, nowIso } from "./db";
+import { eliminarRegistro } from "./eliminaciones";
 import type { RegistroLeche } from "@/types/models";
 
 /** Alta de una medición mensual de leche. */
@@ -23,7 +24,7 @@ export async function registrarLeche(input: {
 
 /** Elimina un registro de producción. */
 export async function eliminarLeche(id: string): Promise<void> {
-  await db.leche.delete(id);
+  await eliminarRegistro("leche", id);
 }
 
 /** Registros de un animal, del más reciente al más antiguo. */

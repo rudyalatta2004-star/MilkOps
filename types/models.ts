@@ -158,3 +158,26 @@ export interface Ingreso extends SyncMeta {
   monto: number;
   tipo: TipoIngreso;
 }
+
+/* ------------------------------------------------------------------ */
+/* Eliminaciones (tombstones) para sincronizar borrados                */
+/* ------------------------------------------------------------------ */
+
+/** Tablas cuyos borrados se sincronizan (nombre remoto en Supabase). */
+export type TablaRemota =
+  | "leche"
+  | "sanidad"
+  | "reproduccion"
+  | "gastos"
+  | "ingresos"
+  | "produccion_diaria";
+
+/**
+ * Marca de borrado. Al eliminar un registro se guarda una de estas para
+ * que el borrado viaje a la nube y se aplique en los demás dispositivos.
+ */
+export interface Eliminacion extends SyncMeta {
+  tabla: TablaRemota;
+  /** id del registro eliminado. */
+  registroId: string;
+}

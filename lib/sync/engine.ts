@@ -1,5 +1,6 @@
 import { supabase, cloudEnabled, BUCKET_FOTOS } from "@/lib/supabase/client";
 import { db, nowIso } from "@/lib/db/db";
+import { aplicarEliminacionRemota } from "@/lib/db/eliminaciones";
 import type {
   Animal,
   RegistroLeche,
@@ -8,6 +9,7 @@ import type {
   Gasto,
   Ingreso,
   ProduccionDiaria,
+  TablaRemota,
 } from "@/types/models";
 
 const LAST_SYNC_KEY = "appvaca-last-sync";
@@ -271,6 +273,32 @@ async function push(userId: string): Promise<number> {
     }
   }
 
+  // Eliminaciones: borra el registro en la nube y sube la marca para que
+  // los demás dispositivos apliquen el mismo borrado.
+  const elimPend = await db.eliminaciones
+    .where("syncStatus")
+    .equals("pending")
+    .toArray();
+  for (const e of elimPend) {
+    const { error: errBorrado } = await supabase
+      .from(e.tabla)
+      .delete()
+      .eq("id", e.registroId);
+    if (errBorrado) continue;
+    const { error: errMarca } = await supabase.from("eliminaciones").upsert({
+      id: e.id,
+      user_id: userId,
+      tabla: e.tabla,
+      registro_id: e.registroId,
+      created_at: e.createdAt,
+      updated_at: e.updatedAt,
+    });
+    if (!errMarca) {
+      await db.eliminaciones.update(e.id, { syncStatus: "synced", remoteId: e.id });
+      subidos++;
+    }
+  }
+
   return subidos;
 }
 
@@ -384,6 +412,20 @@ async function pull(desde: string): Promise<number> {
     }
   }
 
+  // Eliminaciones remotas: se aplican al final para que el borrado gane
+  // sobre cualquier fila que se acabe de bajar.
+  const { data: eRows } = await supabase
+    .from("eliminaciones")
+    .select("*")
+    .gt("updated_at", desde);
+  for (const row of eRows ?? []) {
+    await aplicarEliminacionRemota(
+      row.tabla as TablaRemota,
+      row.registro_id as string,
+    );
+    bajados++;
+  }
+
   return bajados;
 }
 
@@ -421,7 +463,7 @@ export async function sincronizar(): Promise<ResultadoSync> {
 
 /** Número de registros locales pendientes de subir. */
 export async function pendientesLocales(): Promise<number> {
-  const [a, l, s, r, g, i, p] = await Promise.all([
+  const [a, l, s, r, g, i, p, e] = await Promise.all([
     db.animales.where("syncStatus").equals("pending").count(),
     db.leche.where("syncStatus").equals("pending").count(),
     db.sanidad.where("syncStatus").equals("pending").count(),
@@ -429,6 +471,7 @@ export async function pendientesLocales(): Promise<number> {
     db.gastos.where("syncStatus").equals("pending").count(),
     db.ingresos.where("syncStatus").equals("pending").count(),
     db.produccionDiaria.where("syncStatus").equals("pending").count(),
+    db.eliminaciones.where("syncStatus").equals("pending").count(),
   ]);
-  return a + l + s + r + g + i + p;
+  return a + l + s + r + g + i + p + e;
 }

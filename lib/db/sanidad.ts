@@ -1,4 +1,5 @@
 import { db, newId, nowIso } from "./db";
+import { eliminarRegistro } from "./eliminaciones";
 import type { RegistroSanitario, TipoSanitario } from "@/types/models";
 
 /** Alta de un registro sanitario (RF-03.1). */
@@ -25,7 +26,7 @@ export async function registrarSanitario(input: {
 
 /** Elimina un registro sanitario. */
 export async function eliminarSanitario(id: string): Promise<void> {
-  await db.sanidad.delete(id);
+  await eliminarRegistro("sanidad", id);
 }
 
 /** Historial sanitario de un animal (más reciente primero). */

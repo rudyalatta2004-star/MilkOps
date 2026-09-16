@@ -7,6 +7,7 @@ import type {
   Gasto,
   Ingreso,
   ProduccionDiaria,
+  Eliminacion,
 } from "@/types/models";
 
 /**
@@ -22,6 +23,7 @@ class AppVacaDB extends Dexie {
   gastos!: EntityTable<Gasto, "id">;
   ingresos!: EntityTable<Ingreso, "id">;
   produccionDiaria!: EntityTable<ProduccionDiaria, "id">;
+  eliminaciones!: EntityTable<Eliminacion, "id">;
 
   constructor() {
     super("appvaca");
@@ -51,6 +53,11 @@ class AppVacaDB extends Dexie {
     // v4: producción diaria total del hato (una fila por día).
     this.version(4).stores({
       produccionDiaria: "id, fecha, syncStatus, updatedAt",
+    });
+
+    // v5: marcas de borrado para sincronizar eliminaciones entre equipos.
+    this.version(5).stores({
+      eliminaciones: "id, tabla, registroId, syncStatus, updatedAt",
     });
   }
 }

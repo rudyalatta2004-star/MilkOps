@@ -1,4 +1,5 @@
 import { db, newId, nowIso } from "./db";
+import { eliminarRegistro } from "./eliminaciones";
 import type { ProduccionDiaria } from "@/types/models";
 
 /**
@@ -24,7 +25,7 @@ export async function agregarProduccionDia(
 
 /** Elimina una entrada de producción. */
 export function eliminarProduccionDia(id: string): Promise<void> {
-  return db.produccionDiaria.delete(id);
+  return eliminarRegistro("produccion_diaria", id);
 }
 
 /** Suma de litros registrados para una fecha. */

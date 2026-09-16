@@ -101,6 +101,17 @@ create table if not exists public.produccion_diaria (
   updated_at timestamptz not null default now()
 );
 
+-- ---------- Tabla: eliminaciones (marcas de borrado) ----------
+-- Permite que un borrado hecho en un dispositivo se aplique en los demás.
+create table if not exists public.eliminaciones (
+  id uuid primary key,
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  tabla text not null,
+  registro_id uuid not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 -- ---------- Seguridad a nivel de fila (RLS) ----------
 alter table public.animales      enable row level security;
 alter table public.leche         enable row level security;
@@ -109,12 +120,13 @@ alter table public.reproduccion  enable row level security;
 alter table public.gastos        enable row level security;
 alter table public.ingresos      enable row level security;
 alter table public.produccion_diaria enable row level security;
+alter table public.eliminaciones enable row level security;
 
 -- Política única por tabla: el usuario solo accede a sus filas.
 do $$
 declare t text;
 begin
-  foreach t in array array['animales','leche','sanidad','reproduccion','gastos','ingresos','produccion_diaria'] loop
+  foreach t in array array['animales','leche','sanidad','reproduccion','gastos','ingresos','produccion_diaria','eliminaciones'] loop
     execute format('drop policy if exists "propias" on public.%I;', t);
     execute format(
       'create policy "propias" on public.%I
