@@ -62,8 +62,21 @@ function PantallaLogin() {
     try {
       await iniciarSesion(email, password);
       // onAuthStateChange deja pasar a la app automáticamente.
-    } catch {
-      setError("Correo o contraseña incorrectos.");
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      if (/invalid login credentials/i.test(msg)) {
+        setError("Correo o contraseña incorrectos.");
+      } else if (/email not confirmed/i.test(msg)) {
+        setError(
+          "Falta confirmar el correo de esta cuenta desde el enlace que envió Supabase.",
+        );
+      } else if (/failed to fetch|network|load failed/i.test(msg)) {
+        setError(
+          "No se pudo contactar al servidor. Revisa tu internet o que el proyecto de Supabase esté activo (los planes gratuitos se pausan por inactividad).",
+        );
+      } else {
+        setError(msg || "No se pudo iniciar sesión.");
+      }
       setEntrando(false);
     }
   }
