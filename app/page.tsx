@@ -120,13 +120,13 @@ export default function DashboardPage() {
       <Card className="space-y-4 p-5 shadow-lg sm:p-6">
         <div className="flex justify-center">
           <Image
-            src="/logo.png"
+            src="/logo-inicio.png"
             unoptimized
             alt="MilkOps"
             width={360}
-            height={298}
+            height={360}
             priority
-            className="h-auto w-48 object-contain sm:w-56"
+            className="h-auto w-36 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)] sm:w-40"
           />
         </div>
 
